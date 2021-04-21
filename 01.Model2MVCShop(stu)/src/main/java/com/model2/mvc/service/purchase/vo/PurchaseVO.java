@@ -8,17 +8,17 @@ import com.model2.mvc.service.user.vo.UserVO;
 
 public class PurchaseVO {
 	
-	private UserVO buyer;
-	private String divyAddr;
-	private String divyDate;
-	private String divyRequest;
-	private Date orderDate;
-	private String paymentOption;
-	private ProductVO purchaseProd;
-	private String receiverName;
-	private String receiverPhone;
-	private String tranCode;
-	private int tranNo;
+	private UserVO buyer;          //구매자정보(구매자아이디)
+	private String divyAddr;       //구매자주소
+	private String divyDate;       //배송희망일자
+	private String divyRequest;    //구매요청사항
+	private Date orderDate;        //구매일자
+	private String paymentOption;  //구매방법
+	private ProductVO purchaseProd;//구매물품정보(상품번호)
+	private String receiverName;   //구매자이름
+	private String receiverPhone;  //구매자연락처
+	private String tranCode;       //구매상태코드
+	private int tranNo;            //구매번호
 	
 	public PurchaseVO(){
 	}

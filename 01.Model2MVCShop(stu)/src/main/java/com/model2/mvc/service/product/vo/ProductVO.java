@@ -5,13 +5,13 @@ import java.sql.Date;
 
 public class ProductVO {
 	
-	private String fileName; //상품이미지
-	private String manuDate; //제조일자
-	private int price; //가격
+	private String fileName;   //상품이미지
+	private String manuDate;   //제조일자
+	private int price;         //가격
 	private String prodDetail; //상품상세정보
-	private String prodName; //상품명
-	private int prodNo; //상품번호
-	private Date regDate; //등록일자
+	private String prodName;   //상품명
+	private int prodNo;        //상품번호
+	private Date regDate;      //등록일자
 	private String proTranCode; 
 	
 	public ProductVO(){
