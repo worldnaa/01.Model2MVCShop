@@ -14,17 +14,20 @@ public class AddPurchaseAction extends Action {//구매 요청
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		System.out.println("<<<<< AddPurchaseAction : execute() 시작 >>>>>");
 		
 		PurchaseVO purchaseVO = new PurchaseVO();
-		UserVO userVO = new UserVO();
 		ProductVO productVO = new ProductVO();
+		UserVO userVO = new UserVO();
 		
 //		purchaseVO.setPurchaseProd(request.getParameter("purchaseProd"));  //상품번호
 //		purchaseVO.setBuyer(request.getParameter("buyer"));                //구매자아이디    
 		
 		productVO.setProdNo(Integer.parseInt(request.getParameter("prodNo")));  
-		purchaseVO.setPurchaseProd(productVO);
+		purchaseVO.setPurchaseProd(productVO);//상품번호
 		
+		userVO.setUserId(request.getParameter("userId"));
+		purchaseVO.setBuyer(userVO);//구매자아이디
 		
 		purchaseVO.setPaymentOption(request.getParameter("paymentOption"));//구매방법
 		purchaseVO.setReceiverName(request.getParameter("receiverName"));  //구매자이름
@@ -42,6 +45,9 @@ public class AddPurchaseAction extends Action {//구매 요청
 		purchaseService.addPurchase(purchaseVO);
 		
 		request.setAttribute("purchaseVO", purchaseVO);
+		
+		
+		System.out.println("<<<<< AddPurchaseAction : execute() 종료 >>>>>");
 		
 		return "forward:/purchase/addPurchase.jsp";
 		
