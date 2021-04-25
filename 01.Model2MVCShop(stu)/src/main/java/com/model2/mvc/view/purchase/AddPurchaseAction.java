@@ -26,9 +26,9 @@ public class AddPurchaseAction extends Action {//구매 요청
 		purchaseVO.setPaymentOption(request.getParameter("paymentOption"));//구매방법
 		purchaseVO.setReceiverName(request.getParameter("receiverName"));  //구매자이름
 		purchaseVO.setReceiverPhone(request.getParameter("receiverPhone"));//구매자연락처
-		purchaseVO.setDivyAddr(request.getParameter("divyAddr"));          //구매자주소
-		purchaseVO.setDivyRequest(request.getParameter("divyRequest"));    //구매요청사항
-		purchaseVO.setDivyDate(request.getParameter("divyDate"));          //배송희망일자
+		purchaseVO.setDivyAddr(request.getParameter("receiverAddr"));          //구매자주소
+		purchaseVO.setDivyRequest(request.getParameter("receiverRequest"));    //구매요청사항
+		purchaseVO.setDivyDate(request.getParameter("receiverDate"));          //배송희망일자
 		System.out.println("1.purchaseVO는? " + purchaseVO);//디버깅
 		
 		//2. ProductVO의 값을 PurchaseVO에 저장

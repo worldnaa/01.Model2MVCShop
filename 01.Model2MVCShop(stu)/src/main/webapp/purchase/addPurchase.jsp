@@ -35,7 +35,12 @@
 	<tr>
 		<td>구매방법</td>
 		<td>
-		<td><%=purchaseVO.getPaymentOption()%></td>
+			<% if(purchaseVO.getPaymentOption().equals("1")) {%>
+				현금구매
+			<% }else { %>
+				신용구매
+			<% } %>
+		</td>
 		<td></td>
 	</tr>
 	<tr>
@@ -68,3 +73,4 @@
 
 </body>
 </html>
+<% System.out.println("<<<<< addPurchase.jsp 종료 >>>>>"); %>
