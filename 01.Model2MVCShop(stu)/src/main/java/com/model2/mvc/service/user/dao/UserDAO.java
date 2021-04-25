@@ -10,13 +10,16 @@ import com.model2.mvc.common.SearchVO;
 import com.model2.mvc.common.util.DBUtil;
 import com.model2.mvc.service.user.vo.UserVO;
 
-
 public class UserDAO {
-	
+	//Field
+	//Constructor
 	public UserDAO(){
 	}
-
+	
+	//Method
+	//유저 정보 등록을 위한 DBMS를 수행
 	public void insertUser(UserVO userVO) throws Exception {
+		System.out.println("<<<<< UserDAO : insertUser() 시작 >>>>>");
 		
 		Connection con = DBUtil.getConnection();
 
@@ -33,9 +36,12 @@ public class UserDAO {
 		stmt.executeUpdate();
 		
 		con.close();
+		System.out.println("<<<<< UserDAO : insertUser() 종료 >>>>>");
 	}
 
+	//유저 정보 조회를 위한 DBMS를 수행
 	public UserVO findUser(String userId) throws Exception {
+		System.out.println("<<<<< UserDAO : findUser() 시작 >>>>>");
 		
 		Connection con = DBUtil.getConnection();
 
@@ -62,10 +68,13 @@ public class UserDAO {
 		
 		con.close();
 
+		System.out.println("<<<<< UserDAO : findUser() 종료 >>>>>");
 		return userVO;
 	}
 
+	//유저 목록 조회를 위한 DBMS를 수행
 	public HashMap<String,Object> getUserList(SearchVO searchVO) throws Exception {
+		System.out.println("<<<<< UserDAO : getUserList() 시작 >>>>>");
 		
 		Connection con = DBUtil.getConnection();
 		
@@ -121,11 +130,14 @@ public class UserDAO {
 		System.out.println("map().size() : "+ map.size());
 
 		con.close();
-			
+		
+		System.out.println("<<<<< UserDAO : getUserList() 종료 >>>>>");
 		return map;
 	}
 
+	//유저 정보 수정을 위한 DBMS를 수행
 	public void updateUser(UserVO userVO) throws Exception {
+		System.out.println("<<<<< UserDAO : updateUser() 시작 >>>>>");
 		
 		Connection con = DBUtil.getConnection();
 
@@ -140,5 +152,7 @@ public class UserDAO {
 		stmt.executeUpdate();
 		
 		con.close();
+		System.out.println("<<<<< UserDAO : updateUser() 종료 >>>>>");
 	}
-}
+	
+}//end of class

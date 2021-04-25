@@ -17,40 +17,44 @@ public class PurchaseServiceImpl implements PurchaseService {
 	}
 
 	//Method
+	//구매를 위한 비즈니스를 수행
 	public void addPurchase(PurchaseVO purchaseVO) throws Exception {
 		System.out.println("<<<<< PurchaseServiceImpl : addPurchase() 실행 >>>>>");
 		purchaseDAO.insertPurchase(purchaseVO);
-
 	}
 
+	//구매 정보 상세조회를 위한 비즈니스를 수행
 	public PurchaseVO getPurchase(int tranNo) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	//
 	public PurchaseVO getPurchase2(int ProdNo) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	//구매 목록 보기를 위한 비즈니스를 수행
 	public HashMap<String, Object> getPurchaseList(SearchVO searchVO, String buyerId) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	//판매 목록 보기를 위한 비즈니스를 수행
 	public HashMap<String, Object> getSaleList(SearchVO searchVO) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	//구매 정보 수정을 위한 비즈니스 수행
 	public void updatePurcahse(PurchaseVO purchaseVO) throws Exception {
 		// TODO Auto-generated method stub
-
 	}
 
+	//구매 상태 코드 수정을 위한 비즈니스 수행
 	public void updateTranCode(PurchaseVO purchaseVO) throws Exception {
 		// TODO Auto-generated method stub
-
 	}
 
-}
+}//end of class

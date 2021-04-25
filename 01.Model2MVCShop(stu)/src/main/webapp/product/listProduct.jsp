@@ -1,4 +1,4 @@
-<%@page import="com.model2.mvc.service.domain.ProductVO"%>
+<%@page import="com.model2.mvc.service.product.vo.ProductVO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.model2.mvc.common.SearchVO"%>
 <%@page import="java.util.HashMap"%>
