@@ -20,7 +20,6 @@ public class ProductDAO {
 	//Method
 	//매개변수로 받은 ProductVO 값을, PRODUCT 테이블에 순서대로 삽입
 	public void insertProduct(ProductVO productVO) throws SQLException {
-		//디버깅
 		System.out.println("<<<여기는 DAO : insertProduct() 실행>>>");
 		
 		Connection con = DBUtil.getConnection();
@@ -36,6 +35,7 @@ public class ProductDAO {
 		stmt.executeUpdate();
 		
 		con.close();	
+		System.out.println("<<<여기는 DAO : insertProduct() 종료>>>");
 	}
 	
 	//매개변수로 받은 prodNo(상품번호)에 해당하는 정보를 PRODUCT 테이블에서 검색

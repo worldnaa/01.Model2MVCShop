@@ -37,13 +37,13 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 	//구매 목록 보기를 위한 비즈니스를 수행
 	public HashMap<String, Object> getPurchaseList(SearchVO searchVO, String buyerId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("<<<<< PurchaseServiceImpl : getPurchaseList() 실행 >>>>>");
+		return purchaseDAO.getPurchaseList(searchVO, buyerId);
 	}
 
 	//판매 목록 보기를 위한 비즈니스를 수행
 	public HashMap<String, Object> getSaleList(SearchVO searchVO) throws Exception {
-		// TODO Auto-generated method stub
+		System.out.println("<<<<< PurchaseServiceImpl : getSaleList() 실행 >>>>>");
 		return null;
 	}
 

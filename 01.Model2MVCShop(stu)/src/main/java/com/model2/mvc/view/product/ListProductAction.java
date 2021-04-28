@@ -22,8 +22,7 @@ public class ListProductAction extends Action {//상품목록조회 요청
 	
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//디버깅
-		System.out.println("<<<여기는 ListProductAction >>>");
+		System.out.println("<<<<< ListProductAction : execute() 시작 >>>>>");
 		
 		//SearchVO 인스턴스 생성
 		SearchVO searchVO = new SearchVO();
@@ -61,7 +60,6 @@ public class ListProductAction extends Action {//상품목록조회 요청
 		
 		//map에 ProductServiceImpl의 getProductList() 메소드 결과값 저장
 		HashMap<String,Object> map = service.getProductList(searchVO);
-		System.out.println("<<< DAO : getProductList() 종료 >>>");//디버깅
 		System.out.println("map은? "+map);//디버깅
 		
 		//menu에 "menu"의 value(manage 혹은 search)를 불러와 저장
@@ -73,8 +71,9 @@ public class ListProductAction extends Action {//상품목록조회 요청
 		request.setAttribute("searchVO", searchVO);
 		request.setAttribute("menu", menu);
 		
+		System.out.println("<<<<< ListProductAction : execute() 종료 >>>>>");
+		
 		return "forward:/product/listProduct.jsp";
 		
-	}//end of execute()
-	
+	}//end of execute()	
 }//end of class

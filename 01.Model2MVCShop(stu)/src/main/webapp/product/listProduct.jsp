@@ -201,7 +201,8 @@ function fncGetProductList(){
 	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
 	</tr>	
-	<% } %>	
+	<% } %>
+</table>	
 			
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
