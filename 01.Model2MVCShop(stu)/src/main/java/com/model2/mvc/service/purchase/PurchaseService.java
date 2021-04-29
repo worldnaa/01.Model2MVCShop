@@ -12,11 +12,11 @@ public interface PurchaseService {
 	
 	public PurchaseVO getPurchase(int tranNo) throws Exception;
 	
-	public PurchaseVO getPurchase2(int ProdNo) throws Exception;
+//	public PurchaseVO getPurchase2(int ProdNo) throws Exception;
 	
 	public HashMap<String,Object> getPurchaseList(SearchVO searchVO,String buyerId) throws Exception;
 	
-	public HashMap<String,Object> getSaleList(SearchVO searchVO) throws Exception;
+//	public HashMap<String,Object> getSaleList(SearchVO searchVO) throws Exception;
 	
 	public void updatePurcahse(PurchaseVO purchaseVO) throws Exception;
 	

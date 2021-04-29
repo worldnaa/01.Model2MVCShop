@@ -25,14 +25,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 	//구매 정보 상세조회를 위한 비즈니스를 수행
 	public PurchaseVO getPurchase(int tranNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	//
-	public PurchaseVO getPurchase2(int ProdNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("<<<<< PurchaseServiceImpl : getPurchase() 실행 >>>>>");
+		return purchaseDAO.findPurchase(tranNo);
 	}
 
 	//구매 목록 보기를 위한 비즈니스를 수행
@@ -41,20 +35,26 @@ public class PurchaseServiceImpl implements PurchaseService {
 		return purchaseDAO.getPurchaseList(searchVO, buyerId);
 	}
 
-	//판매 목록 보기를 위한 비즈니스를 수행
-	public HashMap<String, Object> getSaleList(SearchVO searchVO) throws Exception {
-		System.out.println("<<<<< PurchaseServiceImpl : getSaleList() 실행 >>>>>");
-		return null;
-	}
-
 	//구매 정보 수정을 위한 비즈니스 수행
 	public void updatePurcahse(PurchaseVO purchaseVO) throws Exception {
-		// TODO Auto-generated method stub
+		System.out.println("<<<<< PurchaseServiceImpl : updatePurcahse() 실행 >>>>>");
+		purchaseDAO.updatePurchase(purchaseVO);
 	}
 
 	//구매 상태 코드 수정을 위한 비즈니스 수행
 	public void updateTranCode(PurchaseVO purchaseVO) throws Exception {
-		// TODO Auto-generated method stub
+		System.out.println("<<<<< PurchaseServiceImpl : updateTranCode() 실행 >>>>>");
+		
 	}
+	
+	//판매 목록 보기를 위한 비즈니스를 수행
+//	public HashMap<String, Object> getSaleList(SearchVO searchVO) throws Exception {
+//		return null;
+//	}
+	
+	
+//	public PurchaseVO getPurchase2(int ProdNo) throws Exception {
+//		return null;
+//	}
 
 }//end of class

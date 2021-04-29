@@ -43,6 +43,7 @@ public class PurchaseDAO {
 		
 		pStmt.executeUpdate();
 		
+		pStmt.close();
 		con.close();	
 		System.out.println("<<<<< PurchaseDAO : insertProduct() 종료 >>>>>");
 	}
@@ -51,10 +52,11 @@ public class PurchaseDAO {
 	//구매정보 상세 조회를 위한 DBMS를 수행
 	public PurchaseVO findPurchase(int tranNo) throws Exception {
 		System.out.println("<<<<< PurchaseDAO : findPurchase() 시작 >>>>>");
+		System.out.println("tranNo 는? " + tranNo);
 		
 		Connection con = DBUtil.getConnection();
 		
-		String sql = "SELECT * FROM transaction WHERE prod_no=?";
+		String sql = "SELECT * FROM transaction WHERE tran_no = ? ";
 		
 		PreparedStatement pStmt = con.prepareStatement(sql);
 		pStmt.setInt(1, tranNo);
@@ -62,20 +64,32 @@ public class PurchaseDAO {
 		ResultSet rs = pStmt.executeQuery();
 		
 		PurchaseVO purchaseVO = new PurchaseVO();
-		ProductVO productVO = new ProductVO();
-		UserVO userVO = new UserVO();
-		
 		while (rs.next()) {
-			purchaseVO.setDivyAddr(rs.getString("demailaddr"));
-			purchaseVO.setDivyDate(rs.getString("dlvy_date"));
-			purchaseVO.setDivyRequest(rs.getString("dlvy_request"));
-			purchaseVO.setOrderDate(rs.getDate("order_data"));
+			
+			ProductVO productVO = new ProductVO();
+			productVO.setProdNo(rs.getInt("prod_no"));
+			purchaseVO.setPurchaseProd(productVO);
+			
+			UserVO userVO = new UserVO();
+			userVO.setUserId(rs.getString("buyer_id"));
+			purchaseVO.setBuyer(userVO);
+			
 			purchaseVO.setPaymentOption(rs.getString("payment_option"));
 			purchaseVO.setReceiverName(rs.getString("receiver_name"));
 			purchaseVO.setReceiverPhone(rs.getString("receiver_phone"));
-			purchaseVO.setTranCode(sql);
-//			purchaseVO.setBuyer(rs.getString("buyer_id"));	
+			purchaseVO.setDivyAddr(rs.getString("demailaddr"));
+			purchaseVO.setDivyRequest(rs.getString("dlvy_request"));
+			purchaseVO.setDivyDate(rs.getString("dlvy_date"));
+			purchaseVO.setOrderDate(rs.getDate("order_data"));
+			purchaseVO.setTranNo(rs.getInt("tran_no"));
+
+			System.out.println("purchaseVO 는? " + purchaseVO);
 		}
+		
+		rs.close();
+		pStmt.close();
+		con.close();
+		
 		System.out.println("<<<<< PurchaseDAO : findPurchase() 종료 >>>>>");
 		return purchaseVO; 
 	}
@@ -89,26 +103,21 @@ public class PurchaseDAO {
 		Connection con = DBUtil.getConnection();
 		
 		String sql = "SELECT * FROM transaction WHERE buyer_id = ? ";
-		System.out.println("1. sql은? " + sql);
 		
 		PreparedStatement pStmt = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, 
 															ResultSet.CONCUR_UPDATABLE);
 		pStmt.setString(1, buyerId);
 		
 		ResultSet rs = pStmt.executeQuery();
-		
-		System.out.println("2. sql은? " + sql);
+		System.out.println("sql 은? " + sql);
 		
 		rs.last(); //boolean last() : 마지막 행으로 커서 이동
 		int total = rs.getRow(); //int getRow() : 현재 행번호 검색 (마지막 행번호 = 전체 행의 수)
 		System.out.println("전체 로우의 수 : " + total);
 		
 		HashMap<String,Object> map = new HashMap<String,Object>();
-		
-//		map.put("count", new Integer(total));
 		map.put("count", total);
-		
-		System.out.println("map은? " + map);
+		System.out.println("map 은? " + map);
 		
 		//boolean absolute(int row) : 지정된 행번호로 커서 이동
 		rs.absolute(searchVO.getPage() * searchVO.getPageUnit() - searchVO.getPageUnit()+1);
@@ -126,14 +135,9 @@ public class PurchaseDAO {
 				purchaseVO.setReceiverName(rs.getString("receiver_name"));
 				purchaseVO.setReceiverPhone(rs.getString("receiver_phone"));
 				purchaseVO.setTranCode(rs.getString("tran_status_code"));
-				
-//				UserVO userVO = new UserVO();
-//				userVO.setUserId(rs.getString("buyer_id"));
-//				purchaseVO.setBuyer(userVO);
-				
+								
 				UserService service = new UserServiceImpl();
 				purchaseVO.setBuyer(service.getUser(rs.getString("BUYER_ID")));
-				
 				
 				list.add(purchaseVO);
 				
@@ -143,11 +147,11 @@ public class PurchaseDAO {
 			}
 		}
 		System.out.println("list.size() : "+ list.size());
-		System.out.println("list는? " + list);
+		System.out.println("list 는? " + list);
 		
 		map.put("list", list);
 		System.out.println("map().size() : "+ map.size()); 
-		System.out.println("map은? " + map);
+		System.out.println("map 은? " + map);
 		
 		rs.close();
 		pStmt.close();
@@ -158,7 +162,34 @@ public class PurchaseDAO {
 	}
 	
 	
-	
+	//구매정보 수정을 위한 DBMS를 수행
+	public void updatePurchase(PurchaseVO purchaseVO) throws SQLException {
+		System.out.println("<<<<< PurchaseDAO : updatePurchase() 시작 >>>>>");
+		
+		Connection con = DBUtil.getConnection();
+		
+		String sql = "UPDATE transaction "
+					+ "SET payment_option=?, receiver_name=?, receiver_phone=?,"
+					+ "demailaddr=?, dlvy_request=?, dlvy_date=? "
+					+ "WHERE tran_no=? ";
+		
+		PreparedStatement pStmt = con.prepareStatement(sql);
+		pStmt.setString(1, purchaseVO.getPaymentOption());
+		pStmt.setString(2, purchaseVO.getReceiverName());
+		pStmt.setString(3, purchaseVO.getReceiverPhone());
+		pStmt.setString(4, purchaseVO.getDivyAddr());
+		pStmt.setString(5, purchaseVO.getDivyRequest());
+		pStmt.setString(6, purchaseVO.getDivyDate());
+		pStmt.setInt(7, purchaseVO.getTranNo());
+		System.out.println("purchaseVO 는? " + purchaseVO);
+		
+		pStmt.executeUpdate();
+		
+		pStmt.close();
+		con.close();
+		
+		System.out.println("<<<<< PurchaseDAO : updatePurchase() 종료 >>>>>");
+	}
 	
 	
 	
