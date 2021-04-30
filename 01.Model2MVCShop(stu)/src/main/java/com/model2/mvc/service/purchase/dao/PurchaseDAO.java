@@ -9,7 +9,11 @@ import java.util.HashMap;
 
 import com.model2.mvc.common.SearchVO;
 import com.model2.mvc.common.util.DBUtil;
+import com.model2.mvc.service.product.ProductService;
+import com.model2.mvc.service.product.impl.ProductServiceImpl;
 import com.model2.mvc.service.product.vo.ProductVO;
+import com.model2.mvc.service.purchase.PurchaseService;
+import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
 import com.model2.mvc.service.purchase.vo.PurchaseVO;
 import com.model2.mvc.service.user.UserService;
 import com.model2.mvc.service.user.impl.UserServiceImpl;
@@ -95,6 +99,37 @@ public class PurchaseDAO {
 	}
 	
 	
+	//물건 재고 여부를 파악하기 위한 DBMS를 수행
+	public PurchaseVO findPurchase2(int prodNo) throws Exception {
+		System.out.println("<<<<< PurchaseDAO : findPurchase2() 시작 >>>>>");
+		System.out.println("prodNo 는? " + prodNo);
+			
+		Connection con = DBUtil.getConnection();
+			
+		String sql = "SELECT * FROM transaction WHERE prod_no = ? ";
+			
+		PreparedStatement pStmt = con.prepareStatement(sql);
+		pStmt.setInt(1, prodNo);
+			
+		ResultSet rs = pStmt.executeQuery();
+			
+		PurchaseVO purchaseVO = new PurchaseVO();
+		while (rs.next()) {
+			purchaseVO.setTranNo(rs.getInt("tran_no"));
+			purchaseVO.setTranCode(rs.getString("tran_status_code"));
+			System.out.println("findPurchase2 의 tran_no 는? " + purchaseVO.getTranNo());
+			System.out.println("findPurchase2 의 tran_status_code 는? " + purchaseVO.getTranCode());
+		}
+			
+		rs.close();
+		pStmt.close();
+		con.close();
+			
+		System.out.println("<<<<< PurchaseDAO : findPurchase2() 종료 >>>>>");
+		return purchaseVO; 
+	}
+		
+	
 	//구매목록 보기를 위한 DBMS를 수행
 	public HashMap<String,Object> getPurchaseList(SearchVO searchVO, String buyerId) throws Exception {
 		System.out.println("<<<<< PurchaseDAO : getPurchaseList() 시작 >>>>>");
@@ -134,10 +169,10 @@ public class PurchaseDAO {
 				purchaseVO.setTranNo(rs.getInt("tran_no"));
 				purchaseVO.setReceiverName(rs.getString("receiver_name"));
 				purchaseVO.setReceiverPhone(rs.getString("receiver_phone"));
-				purchaseVO.setTranCode(rs.getString("tran_status_code"));
-								
-				UserService service = new UserServiceImpl();
-				purchaseVO.setBuyer(service.getUser(rs.getString("BUYER_ID")));
+				purchaseVO.setTranCode(rs.getString("tran_status_code"));				
+				
+				UserService userService = new UserServiceImpl();
+				purchaseVO.setBuyer(userService.getUser(rs.getString("buyer_id")));
 				
 				list.add(purchaseVO);
 				
@@ -158,6 +193,110 @@ public class PurchaseDAO {
 		con.close();
 		
 		System.out.println("<<<<< PurchaseDAO : getPurchaseList() 종료 >>>>>");
+		return map;
+	}
+	
+	
+	//판매목록 보기를 위한 DBMS를 수행
+	public HashMap<String,Object> getSaleList(SearchVO searchVO) throws Exception {
+		System.out.println("<<<<< PurchaseDAO : getSaleList() 시작 >>>>>");
+		
+		Connection con = DBUtil.getConnection();
+		
+		String sql = "select * from PRODUCT ";
+		System.out.println("sql은? "+sql);//디버깅
+		
+		//SearchCondition에 값이 있을 경우
+		if (searchVO.getSearchCondition() != null) {
+			if (searchVO.getSearchCondition().equals("0")) {
+				sql += " where PROD_NO like '%" + searchVO.getSearchKeyword() + "%'";
+			} else if (searchVO.getSearchCondition().equals("1")) {
+				sql += " where PROD_NAME like '%" + searchVO.getSearchKeyword() + "%'";
+			} else if (searchVO.getSearchCondition().equals("2")) {
+				sql += " where PRICE like '%" + searchVO.getSearchKeyword() + "%'";
+			}
+			System.out.println("sql은? "+sql);//디버깅
+		}
+		
+		sql += " order by PROD_NO";
+		System.out.println("sql은? "+sql);//디버깅
+
+		PreparedStatement stmt = con.prepareStatement(sql,
+															ResultSet.TYPE_SCROLL_INSENSITIVE,
+															ResultSet.CONCUR_UPDATABLE);
+		ResultSet rs = stmt.executeQuery();
+
+		//boolean last() : 마지막 행으로 커서 이동
+		rs.last();
+		
+		//int getRow() : 현재 행번호 검색 (마지막 행번호 = 전체 행의 수)
+		int total = rs.getRow();
+		System.out.println("전체 로우의 수: " + total);//디버깅
+
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		
+		//"count"에 total(전체 로우의 수) 저장 
+		map.put("count", new Integer(total));
+		System.out.println("map은? "+map);//디버깅
+
+		//boolean absolute(int row) : 지정된 행번호로 커서 이동
+		rs.absolute(searchVO.getPage() * searchVO.getPageUnit() - searchVO.getPageUnit()+1);
+		
+		//디버깅
+		System.out.println("searchVO.getPage(): " + searchVO.getPage());
+		System.out.println("searchVO.getPageUnit(): " + searchVO.getPageUnit());
+ 
+		//<ProductVO>만 들어갈 수 있는 ArrayList 생성
+		ArrayList<ProductVO> list = new ArrayList<ProductVO>();
+		
+		//전체 로우의 수가 1이상이면
+		if (total > 0) {
+			//0~2까지 반복문 3번 실행
+			for (int i=0; i<searchVO.getPageUnit(); i++) {
+				//ProductVO에 PRODUCT 테이블에서 값을 가져와 셋팅
+				ProductVO vo = new ProductVO();
+				vo.setProdNo(rs.getInt("PROD_NO"));
+				vo.setProdName(rs.getString("PROD_NAME"));
+				vo.setProdDetail(rs.getString("PROD_DETAIL"));
+				vo.setManuDate(rs.getString("MANUFACTURE_DAY"));
+				vo.setPrice(rs.getInt("PRICE"));
+				vo.setFileName(rs.getString("IMAGE_FILE"));
+				vo.setRegDate(rs.getDate("REG_DATE"));
+				
+				if(findPurchase2(vo.getProdNo()).getTranCode().trim().equals("1")) {
+					System.out.println("tranCode 는? " + findPurchase2(vo.getProdNo()).getTranCode());
+					vo.setProTranCode("1");//구매완료
+				}else if(findPurchase2(vo.getProdNo()).getTranCode().trim().equals("2")) {
+					System.out.println("tranCode 는? " + findPurchase2(vo.getProdNo()).getTranCode());
+					vo.setProTranCode("3");//배송중
+				}else if(findPurchase2(vo.getProdNo()).getTranCode().trim().equals("3")) {
+					System.out.println("tranCode 는? " + findPurchase2(vo.getProdNo()).getTranCode());
+					vo.setProTranCode("4");//배송완료
+				}
+				System.out.println("proTranCode 는? " + vo.getProTranCode());
+				
+				//list에 ProductVO의 셋팅된 값 저장
+				list.add(vo);
+				
+				if (!rs.next()) {
+					break;
+				}				
+			}
+		}
+		
+		System.out.println("list.size() : "+ list.size()); //디버깅
+		
+		//"list"에 list(ProductVO 데이터) 저장
+		map.put("list", list);
+		
+		System.out.println("map().size() : "+ map.size()); //디버깅
+		System.out.println("map은? "+map);
+		
+		rs.close();
+		stmt.close();
+		con.close();
+		
+		System.out.println("<<<<< PurchaseDAO : getSaleList() 종료 >>>>>");
 		return map;
 	}
 	
@@ -192,22 +331,28 @@ public class PurchaseDAO {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	//구매 상태코드 수정을 위한 DBMS를 수행
+	public void updateTranCode(PurchaseVO purchaseVO) throws Exception {
+		System.out.println("<<<<< PurchaseDAO : updateTranCode() 시작 >>>>>");
+		
+		Connection con = DBUtil.getConnection();
+		
+		String sql = "UPDATE transaction SET tran_status_code=? WHERE tran_no=?";
+		System.out.println("sql은? " + sql);
+		
+		PreparedStatement pStmt = con.prepareStatement(sql);
+		pStmt.setString(1, purchaseVO.getTranCode());
+		pStmt.setInt(2, purchaseVO.getTranNo());
+		
+		System.out.println("tranCode 는? " + purchaseVO.getTranCode());
+		System.out.println("tranNo 는? " + purchaseVO.getTranNo());
+		
+		pStmt.executeUpdate();
+		
+		pStmt.close();
+		con.close();
+		
+		System.out.println("<<<<< PurchaseDAO : updateTranCode() 종료 >>>>>");
+	}
 
 }//end of class

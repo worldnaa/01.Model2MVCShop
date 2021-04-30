@@ -10,6 +10,8 @@ import java.util.HashMap;
 import com.model2.mvc.common.SearchVO;
 import com.model2.mvc.common.util.DBUtil;
 import com.model2.mvc.service.product.vo.ProductVO;
+import com.model2.mvc.service.purchase.PurchaseService;
+import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
 import com.model2.mvc.service.user.vo.UserVO;
 
 public class ProductDAO {
@@ -82,19 +84,12 @@ public class ProductDAO {
 		
 		//SearchCondition에 값이 있을 경우
 		if (searchVO.getSearchCondition() != null) {
-			
 			if (searchVO.getSearchCondition().equals("0")) {
-			
 				sql += " where PROD_NO like '%" + searchVO.getSearchKeyword() + "%'";
-			
 			} else if (searchVO.getSearchCondition().equals("1")) {
-			
 				sql += " where PROD_NAME like '%" + searchVO.getSearchKeyword() + "%'";
-			
 			} else if (searchVO.getSearchCondition().equals("2")) {
-			
 				sql += " where PRICE like '%" + searchVO.getSearchKeyword() + "%'";
-			
 			}
 			System.out.println("sql은? "+sql);//디버깅
 		}
@@ -143,6 +138,14 @@ public class ProductDAO {
 				vo.setPrice(rs.getInt("PRICE"));
 				vo.setFileName(rs.getString("IMAGE_FILE"));
 				vo.setRegDate(rs.getDate("REG_DATE"));
+				
+				PurchaseService service = new PurchaseServiceImpl();
+				
+				if((service.getPurchase2(vo.getProdNo()).getTranNo()) > 0) {
+					vo.setProTranCode("1");//재고없음
+				}else {
+					vo.setProTranCode("2");//판매중
+				}
 				
 				//list에 ProductVO의 셋팅된 값 저장
 				list.add(vo);

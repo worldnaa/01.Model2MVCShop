@@ -196,7 +196,32 @@ function fncGetProductList(){
 		<td></td>
 		<td align="left"><%= vo.getRegDate() %></td>
 		<td></td>
-		<td align="left">판매중</td>	
+		<td align="left">
+		
+		<% if(menu.equals("manage")) { %>
+			
+			<% if(vo.getProTranCode().equals("1")) { %>
+				구매완료
+				<a href="/updateTranCodeByProd.do?prodNo=<%=vo.getProdNo()%>&tranCode=2&page=<%=currentPage%>">배송하기</a>		
+			<% }else if(vo.getProTranCode().equals("2")) { %>
+				판매중
+			<% }else if(vo.getProTranCode().equals("3") ) { %>
+				배송중
+			<% }else if(vo.getProTranCode().equals("4")) { %>	
+				배송완료	
+			<% } %>
+				
+		<% }else if(menu.equals("search")) {%>
+			
+			<% if(vo.getProTranCode().equals("1")) { %>
+				재고없음
+			<% }else if(vo.getProTranCode().equals("2")) { %>
+				판매중
+			<% } %>
+					
+		<% } %>
+				
+		</td>	
 	</tr>			
 	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
@@ -208,7 +233,7 @@ function fncGetProductList(){
 	<tr>
 		<td align="center">
 		
-		<% for(int i=1; i<=totalPage; i++){ %>
+		<% for(int i=1; i<=totalPage; i++) { %>
 			
 			<% if(menu.equals("manage")) { %>
 				<a href="/listProduct.do?page=<%=i%>&searchCondition=<%=searchVO.getSearchCondition() %>

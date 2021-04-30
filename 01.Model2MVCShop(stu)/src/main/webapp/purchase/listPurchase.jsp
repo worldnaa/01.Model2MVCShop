@@ -127,8 +127,7 @@
 		<td></td>
 		<td align="left">
 		<% if (vo.getTranCode().trim().equals("2")) { %>
-			<a href="/updateTranCode.do?tranNo=<%=vo.getTranNo()%>&tranCode=3&page=<%=currentPage%>">
-			물건도착</a>
+			<a href="/updateTranCode.do?tranNo=<%=vo.getTranNo()%>&tranCode=3&page=<%=currentPage%>">물건도착</a>
 		<% } %>
 		</td>
 	</tr>
