@@ -19,26 +19,19 @@ public class UpdateProductViewAction extends Action {//상품정보수정을 위한 화면�
 	
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//디버깅
-		System.out.println("<<<여기는 UpdateProductViewAction >>>");
+		System.out.println("<<<<< UpdateProductViewAction : execute() 시작 >>>>>");
 		
-		//"prodNo"의 value를 가져와서 prodNo에 저장
 		int prodNo = Integer.parseInt(request.getParameter("prodNo"));
-		System.out.println("prodNo는? "+prodNo);//디버깅
+		System.out.println("받은 prodNo : " + prodNo);
 		
-		//ProductServiceImpl 인스턴스 생성
-		ProductService service = new ProductServiceImpl();
+		ProductService ProductService = new ProductServiceImpl();
+		ProductVO productVO = ProductService.getProduct(prodNo);
+		System.out.println("productVO 셋팅완료 : " + productVO);
 		
-		//vo에 ProductServiceImpl의 getProduct() 메소드 결과값 저장
-		ProductVO vo = service.getProduct(prodNo);
-		System.out.println("<<< DAO : getfindProduct() 종료 >>>");//디버깅
-		System.out.println("vo는? "+vo);//디버깅
+		request.setAttribute("productVO", productVO);	
 		
-		//request에 vo, menu 값을 셋팅
-		request.setAttribute("vo", vo);	
+		System.out.println("<<<<< UpdateProductViewAction : execute() 종료 >>>>>");
 		
 		return "forward:/product/updateProductView.jsp";
-		
-	}//end of execute()
-
-}//end of class
+	}
+}

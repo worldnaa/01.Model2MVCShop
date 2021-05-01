@@ -13,6 +13,7 @@ public class AddProductAction extends Action {//상품등록 요청
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		System.out.println("<<<<< AddProductAction : execute() 시작 >>>>>");
 		
 		ProductVO productVO = new ProductVO();
 		productVO.setProdName(request.getParameter("prodName"));                    //상품명
@@ -20,20 +21,19 @@ public class AddProductAction extends Action {//상품등록 요청
 		productVO.setManuDate(request.getParameter("manuDate").replaceAll("-", ""));//제조일자
 		productVO.setPrice(Integer.parseInt(request.getParameter("price")));        //가격		
 		productVO.setFileName(request.getParameter("fileName"));                    //상품이미지
-		
-		System.out.println(productVO);//디버깅
+		System.out.println("productVO 셋팅완료 : " + productVO);
 		
 		ProductService service = new ProductServiceImpl();
 		service.addProduct(productVO);
 		
 		//방법1
+		request.setAttribute("productVO", productVO);
+		
+		//방법2
 //		HttpSession session = request.getSession(true);		
 //		session.setAttribute("productVO",productVO);
 		
-		//방법2
-		request.setAttribute("vo", productVO);
-		
+		System.out.println("<<<<< AddProductAction : execute() 종료 >>>>>");
 		return "forward:/product/addProduct.jsp";
-		
-	}//end of execute()
-}//end of class
+	}
+}

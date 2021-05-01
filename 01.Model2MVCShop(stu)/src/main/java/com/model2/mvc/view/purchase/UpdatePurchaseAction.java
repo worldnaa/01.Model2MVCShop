@@ -15,10 +15,9 @@ public class UpdatePurchaseAction extends Action {//구매정보 수정 요청
 		System.out.println("<<<<< UpdatePurchaseAction : execute() 시작 >>>>>");
 		
 		int tranNo = Integer.parseInt(request.getParameter("tranNo"));
-		System.out.println("tranNo 는? " + tranNo);
+		System.out.println("받은 tranNo : " + tranNo);
 		
 		PurchaseVO purchaseVO = new PurchaseVO();
-		
 		purchaseVO.setTranNo(tranNo);
 		purchaseVO.setPaymentOption(request.getParameter("paymentOption"));
 		purchaseVO.setReceiverName(request.getParameter("receiverName"));
@@ -26,14 +25,13 @@ public class UpdatePurchaseAction extends Action {//구매정보 수정 요청
 		purchaseVO.setDivyAddr(request.getParameter("receiverAddr"));
 		purchaseVO.setDivyRequest(request.getParameter("receiverRequest"));
 		purchaseVO.setDivyDate(request.getParameter("divyDate"));
-		System.out.println("purchaseVO 는? " + purchaseVO);
-		
+		System.out.println("purchaseVO 셋팅완료 : " + purchaseVO);
 		
 		PurchaseService purchaseService = new PurchaseServiceImpl();
 		purchaseService.updatePurcahse(purchaseVO);
 			
 		System.out.println("<<<<< UpdatePurchaseAction : execute() 종료 >>>>>");
+		
 		return "redirect:/getPurchase.do?tranNo="+tranNo;
 	}
-
 }

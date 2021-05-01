@@ -15,11 +15,11 @@ public class GetPurchaseAction extends Action {//구매상세정보 요청
 		System.out.println("<<<<< GetPurchaseAction : execute() 시작 >>>>>");
 		
 		int tranNo = Integer.parseInt(request.getParameter("tranNo"));
-		System.out.println("tranNo 는? " + tranNo);
+		System.out.println("받은 tranNo : " + tranNo);
 		
 		PurchaseService purchaseService = new PurchaseServiceImpl();
 		PurchaseVO purchaseVO = purchaseService.getPurchase(tranNo);
-		System.out.println("purchaseVO 는? " + purchaseVO);
+		System.out.println("purchaseVO 셋팅완료 : " + purchaseVO);
 		
 		request.setAttribute("purchaseVO", purchaseVO);
 		

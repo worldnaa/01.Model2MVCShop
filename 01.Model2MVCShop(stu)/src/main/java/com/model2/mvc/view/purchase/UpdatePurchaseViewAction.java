@@ -15,16 +15,16 @@ public class UpdatePurchaseViewAction extends Action {//구매정보 수정을 위한 화�
 		System.out.println("<<<<< UpdatePurchaseViewAction : execute() 시작 >>>>>");
 		
 		int tranNo = Integer.parseInt(request.getParameter("tranNo"));
-		System.out.println("tranNo 는? " + tranNo);
+		System.out.println("받은 tranNo : " + tranNo);
 		
 		PurchaseService purchaseService = new PurchaseServiceImpl();
 		PurchaseVO purchaseVO = purchaseService.getPurchase(tranNo);
-		System.out.println("purchaseVO 는? " + purchaseVO);
+		System.out.println("purchaseVO 셋팅완료 : " + purchaseVO);
 		
 		request.setAttribute("purchaseVO", purchaseVO);
 		
 		System.out.println("<<<<< UpdatePurchaseViewAction : execute() 종료 >>>>>");
+		
 		return "forward:/purchase/updatePurchaseView.jsp";
 	}
-
 }

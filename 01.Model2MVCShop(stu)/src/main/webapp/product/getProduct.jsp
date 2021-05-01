@@ -2,15 +2,14 @@
 <%@ page import="com.model2.mvc.service.product.vo.*" %>
 
 <%
-	System.out.println("<<< getProduct.jsp 시작 >>>");
+	System.out.println("<<<<< getProduct.jsp 시작 >>>>>");
 
-	ProductVO vo = (ProductVO)request.getAttribute("vo");
-	System.out.println("vo는? "+request.getAttribute("vo"));
+	ProductVO vo = (ProductVO)request.getAttribute("productVO");
+	System.out.println("받은 productVO : " + vo);
 
 	String menu = (String)request.getParameter("menu");
-	System.out.println("menu는? "+request.getParameter("menu"));
+	System.out.println("받은 menu : " + menu);
 %>
-
 
 <html>
 <head>
@@ -173,3 +172,4 @@
 
 </body>
 </html>
+<% System.out.println("<<<<< getProduct.jsp 종료 >>>>>"); %>

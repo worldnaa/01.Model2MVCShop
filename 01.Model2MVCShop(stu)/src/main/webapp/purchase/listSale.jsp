@@ -5,7 +5,7 @@
 <%@page contentType="text/html; charset=euc-kr" %>
 
 <%
-	System.out.println("<<<<< listProduct.jsp 시작 >>>>>");
+	System.out.println("<<<<< listSale.jsp 시작 >>>>>");
 
 	HashMap<String,Object> map = (HashMap<String,Object>)request.getAttribute("map");
 	System.out.println("받은 map : " + map);
@@ -43,7 +43,7 @@
 
 <html>
 <head>
-<title>상품 목록조회</title>
+<title>상품 관리</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
@@ -60,8 +60,7 @@ function fncGetProductList(){
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/listProduct.do?menu=<%=menu %>" method="post">
-
+<form name="detailForm" action="/listProduct.do?menu=search" method="post"> 
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -72,13 +71,7 @@ function fncGetProductList(){
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="93%" class="ct_ttl01">
-						
-						<% if(menu.equals("manage")) { %>
-							상품 관리
-						<% }else if(menu.equals("search")) { %>
-							상품 목록조회
-						<% } %>
-					
+							상품 관리					
 					</td>
 				</tr>
 			</table>
@@ -92,50 +85,17 @@ function fncGetProductList(){
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
-	<%
-		if(searchVO.getSearchCondition() != null) {
-	%>
-		<td align="right">
-			<select name="searchCondition" class="ct_input_g" style="width:80px">
-		<%
-				if(searchVO.getSearchCondition().equals("0")) {
-		%>
-					<option value="0" selected>상품번호</option>
-					<option value="1">상품명</option>
-					<option value="2">상품가격</option>
-		<%
-				}else if(searchVO.getSearchCondition().equals("1")) {
-		%>
-					<option value="0">상품번호</option>
-					<option value="1" selected>상품명</option>
-					<option value="2">상품가격</option>
-		<%
-				}else {
-		%>
-					<option value="0">상품번호</option>
-					<option value="1">상품명</option>
-					<option value="2" selected>상품가격</option>	
-		<%
-				}
-		%>
-			</select>
-			<input 	type="text" name="searchKeyword"  value="<%=searchVO.getSearchKeyword() %>" 
-							class="ct_input_g" style="width:200px; height:19px" >
-		</td>
-	<%
-		}else{
-	%>
+		
 		<td align="right">
 			<select name="searchCondition" class="ct_input_g" style="width:80px">
 				<option value="0">상품번호</option>
 				<option value="1">상품명</option>
 				<option value="2">상품가격</option>
 			</select>
-			<input type="text" name="searchKeyword"  class="ct_input_g" style="width:200px; height:19px" >
+			<input type="text" name="searchKeyword"  class="ct_input_g" style="width:200px; height:19px" />
 		</td>
-	<%
-		}
-	%>
+	
+		
 		<td align="right" width="70">
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
@@ -157,7 +117,7 @@ function fncGetProductList(){
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
-		<td colspan="11" >전체 <%=totalPage %> 건수, 현재 <%=currentPage %> 페이지</td>
+		<td colspan="11" >전체 <%=total%> 건수, 현재 <%=currentPage%> 페이지</td>
 	</tr>
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
@@ -172,45 +132,48 @@ function fncGetProductList(){
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
-	</tr>
-	
-	<% 	
-	int no = list.size();
+	</tr>	
+	<%
+	int no=list.size();
 	for(int i=0; i<list.size(); i++) {
 		ProductVO vo = (ProductVO)list.get(i);
-	%>
-	
+	%>		
 	<tr class="ct_list_pop">
-		<td align="center"><%=no-- %></td>
+		<td align="center"><%=no--%></td>
 		<td></td>
 		<td align="left">
-		
-		<% if(vo.getProTranCode().equals("판매중")) {%>
 				<a href="/getProduct.do?prodNo=<%=vo.getProdNo()%>&menu=<%=menu%>"><%=vo.getProdName()%></a>
-		<% }else{%>
-			<%=vo.getProdName()%>
-		<% } %>
-		
 		</td>
 		<td></td>
 		<td align="left"><%= vo.getPrice() %></td>
 		<td></td>
 		<td align="left"><%= vo.getRegDate() %></td>
-		<td></td>
-		<td align="left"><%= vo.getProTranCode() %></td>	
-	</tr>			
+		<td></td>		
+		<td align="left"> 
+		<% if(vo.getProTranCode() == null){ %>
+			판매중
+		<% } else if(vo.getProTranCode().trim().equals("1")){ %>
+			구매완료 
+			<a href="/updateTranCodeByProd.do?prodNo=<%=vo.getProdNo()%>&tranCode=2&page=<%=searchVO.getPage()%>">배송하기</a>
+		<% } else if(vo.getProTranCode().trim().equals("2")){ %>
+			배송중
+		<% } else if(vo.getProTranCode().trim().equals("3")){ %>
+			배송완료
+		<% } %>
+		</td>		
+	</tr>
 	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-	</tr>	
+	</tr>
 	<% } %>
-</table>	
-			
+</table>
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
 		<td align="center">
 		
 		<% for(int i=1; i<=totalPage; i++) { %>
-			<a href="/listProduct.do?page=<%=i%>&menu=search"><%=i %></a>
+			<a href="/listSale.do?page=<%=i%>&menu=manage"><%=i %></a>
 		<% } %>
 		
     	</td>
@@ -223,4 +186,3 @@ function fncGetProductList(){
 </div>
 </body>
 </html>
-<% System.out.println("<<<<< listProduct.jsp 종료 >>>>>"); %>

@@ -22,37 +22,28 @@ public class UpdateProductAction extends Action {//상품정보수정 요청
 	
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//디버깅
-		System.out.println("<<<여기는 UpdateProductAction >>>");
+		System.out.println("<<<<< UpdateProductAction : execute() 시작 >>>>>");
 				
-		//"prodNo"의 value를 가져와서 prodNo에 저장
 		int prodNo = Integer.parseInt(request.getParameter("prodNo"));
+		System.out.println("받은 prodNo : " + prodNo);
 		
-		//"menu"의 value를 가져와서 menu에 저장
 		String menu = request.getParameter("menu");
-		System.out.println("menu는? "+menu);//디버깅
+		System.out.println("받은 menu : " + menu);
 		
-		//ProductVO 인스턴스 생성
 		ProductVO productVO = new ProductVO();
-		
-		//ProductVO에 업데이트 하려는 값을 가져와 셋팅
 		productVO.setProdNo(prodNo);
 		productVO.setProdName(request.getParameter("prodName"));
 		productVO.setProdDetail(request.getParameter("prodDetail"));
 		productVO.setManuDate(request.getParameter("manuDate"));
 		productVO.setPrice(Integer.parseInt(request.getParameter("price")));
 		productVO.setFileName(request.getParameter("fileName"));
+		System.out.println("productVO 셋팅완료 : " + productVO);
 		
-		//ProductServiceImpl 인스턴스 생성
-		ProductService service = new ProductServiceImpl();
+		ProductService ProductService = new ProductServiceImpl();
+		ProductService.updateProduct(productVO);
 		
-		//service에 ProductServiceImpl의 updateProduct() 메소드 결과값 저장
-		service.updateProduct(productVO);
-		System.out.println("<<< DAO : updateProduct() 종료 >>>");//디버깅
-		System.out.println("service는? "+service);//디버깅
+		System.out.println("<<<<< UpdateProductAction : execute() 시작 >>>>>");
 		
 		return "redirect:/getProduct.do?prodNo="+prodNo+"&menu="+menu;
-		
-	}//end of execute()
-
-}//end of class
+	}
+}

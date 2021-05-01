@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
 
+<% System.out.println("<<<<< addProductView.jsp 시작 >>>>>"); %>
+
 <html>
 <head>
 <title>상품등록</title>
@@ -180,3 +182,4 @@ function resetData(){
 </form>
 </body>
 </html>
+<% System.out.println("<<<<< addProductView.jsp 종료 >>>>>"); %>

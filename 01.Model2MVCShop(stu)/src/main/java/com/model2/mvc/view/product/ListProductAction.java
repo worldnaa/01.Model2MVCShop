@@ -24,56 +24,40 @@ public class ListProductAction extends Action {//상품목록조회 요청
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("<<<<< ListProductAction : execute() 시작 >>>>>");
 		
-		//SearchVO 인스턴스 생성
 		SearchVO searchVO = new SearchVO();
 		
-		//처음 들어올 경우 page는 1
 		int page = 1;
-		
-		//"page"의 value가 null이 아닐 경우 (page를 눌러 들어올 경우)
-		//page에 "page"의 값을 저장 (현재 페이지 값 저장)
+
 		if(request.getParameter("page") != null) {
 			page = Integer.parseInt(request.getParameter("page"));
-			System.out.println("page는? "+page);//디버깅
+			System.out.println("현재 page : " + page);
 		}
 		
-		//SearchVO의 page에 "page"의 값 저장(처음 들어올 경우 1 저장)
-		//SearchVO의 searchCondition에 "searchCondition"의 값 저장
-		//SearchVO의 searchKeyword에 "searchKeyword"의 값 저장
 		searchVO.setPage(page);
 		searchVO.setSearchCondition(request.getParameter("searchCondition"));
 		searchVO.setSearchKeyword(request.getParameter("searchKeyword"));
+
+		System.out.println("searchCondition : "+request.getParameter("searchCondition"));
+		System.out.println("searchKeyword : "+request.getParameter("searchKeyword"));
 		
-		//디버깅
-		System.out.println("page는? "+page);
-		System.out.println("searchCondition은? "+request.getParameter("searchCondition"));
-		System.out.println("searchKeyword는? "+request.getParameter("searchKeyword"));
-		
-		//pageUnit에 web.xml의 "pageSize" 값 3을 저장하고
-		//SearchVO의 pageUnit에 3 저장
+		//pageUnit에 web.xml의 "pageSize" 값 3을 저장하고, SearchVO의 pageUnit에 3 저장
 		String pageUnit = getServletContext().getInitParameter("pageSize");
 		searchVO.setPageUnit(Integer.parseInt(pageUnit));
-		System.out.println("pageUnit은? "+pageUnit);//디버깅
+		System.out.println("searchVO 셋팅완료 : " + searchVO);
 		
-		//ProductServiceImpl 인스턴스 생성
 		ProductService service = new ProductServiceImpl();
-		
-		//map에 ProductServiceImpl의 getProductList() 메소드 결과값 저장
 		HashMap<String,Object> map = service.getProductList(searchVO);
-		System.out.println("map은? "+map);//디버깅
+		System.out.println("map 셋팅완료 : " + map);
 		
-		//menu에 "menu"의 value(manage 혹은 search)를 불러와 저장
 		String menu = request.getParameter("menu");
-		System.out.println("menu는? "+menu);//디버깅
+		System.out.println("menu 셋팅완료 : " + menu);
 
-		//request에 map, searchVO, menu 값을 셋팅
 		request.setAttribute("map", map);
 		request.setAttribute("searchVO", searchVO);
 		request.setAttribute("menu", menu);
 		
 		System.out.println("<<<<< ListProductAction : execute() 종료 >>>>>");
 		
-		return "forward:/product/listProduct.jsp";
-		
-	}//end of execute()	
-}//end of class
+		return "forward:/product/listProduct.jsp";		
+	}
+}

@@ -6,10 +6,10 @@
 	System.out.println("<<<<< addPurchaseView.jsp 시작 >>>>>");
 
 	ProductVO productVO = (ProductVO)request.getAttribute("productVO");
-	System.out.println(productVO);
+	System.out.println("받은 productVO : " + productVO);
 	
 	UserVO userVO = (UserVO)session.getAttribute("user");
-	System.out.println(userVO);
+	System.out.println("받은 userVO : " + userVO);
 %>
 
 <html>

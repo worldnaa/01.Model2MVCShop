@@ -31,6 +31,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 	
 	//물건 재고 여부를 파악하기 위한 비즈니스를 수행
 	public PurchaseVO getPurchase2(int ProdNo) throws Exception {
+		System.out.println("<<<<< PurchaseServiceImpl : getPurchase2() 실행 >>>>>");
 		return purchaseDAO.findPurchase2(ProdNo);
 	}
 

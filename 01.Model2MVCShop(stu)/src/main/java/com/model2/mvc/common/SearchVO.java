@@ -37,4 +37,12 @@ public class SearchVO {
 	public void setSearchKeyword(String searchKeyword) {
 		this.searchKeyword = searchKeyword;
 	}
+
+	@Override
+	public String toString() {
+		return "SearchVO [page=" + page + ", searchCondition=" + searchCondition + ", searchKeyword=" + searchKeyword
+				+ ", pageUnit=" + pageUnit + "]";
+	}
+	
+	
 }

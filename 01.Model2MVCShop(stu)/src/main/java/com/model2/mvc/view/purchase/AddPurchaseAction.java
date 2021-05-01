@@ -21,7 +21,7 @@ public class AddPurchaseAction extends Action {//구매 요청
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("<<<<< AddPurchaseAction : execute() 시작 >>>>>");
 		
-		//1. addPurchaseView.jsp에서 가져온 값을 DB에 쉽게 전달하기 위해 PurchaseVO 인스턴스를 생성하여, 가져온 값을 저장
+		//addPurchaseView.jsp에서 가져온 값을 DB에 쉽게 전달하기 위해 PurchaseVO 인스턴스를 생성하여, 가져온 값을 저장
 		PurchaseVO purchaseVO = new PurchaseVO();
 		purchaseVO.setPaymentOption(request.getParameter("paymentOption")); //구매방법
 		purchaseVO.setReceiverName(request.getParameter("receiverName"));   //구매자이름
@@ -30,14 +30,12 @@ public class AddPurchaseAction extends Action {//구매 요청
 		purchaseVO.setDivyRequest(request.getParameter("receiverRequest")); //구매요청사항
 		purchaseVO.setDivyDate(request.getParameter("receiverDate"));       //배송희망일자
 		purchaseVO.setTranCode("1");
-		System.out.println("1.purchaseVO는? " + purchaseVO);//디버깅
 		
 		//2. ProductVO의 값을 PurchaseVO에 저장
 		//방법1)
 		ProductService productService = new ProductServiceImpl();
 		ProductVO productVO = productService.getProduct((Integer.parseInt(request.getParameter("prodNo"))));
 		purchaseVO.setPurchaseProd(productVO);                              //상품정보
-		System.out.println("2.purchaseVO는? " + purchaseVO);//디버깅
 		//방법2)
 //		ProductVO productVO = new ProductVO();
 //		productVO.setProdNo(Integer.parseInt(request.getParameter("prodNo"))); 
@@ -47,24 +45,20 @@ public class AddPurchaseAction extends Action {//구매 요청
 		//방법1)
 		HttpSession session = request.getSession();
 		purchaseVO.setBuyer((UserVO)session.getAttribute("user"));		    //구매자아이디
-		System.out.println("3.purchaseVO는? " + purchaseVO);//디버깅
 		//방법2)
 //		UserVO userVO = new UserVO();
 //		userVO.setUserId(request.getParameter("userId"));
 //		purchaseVO.setBuyer(userVO);	
 		
-		//4. purchaseVO를 DB에 저장하기 위해 PurchaseServiceImpl 인스턴스 생성
-		PurchaseService purchaseService = new PurchaseServiceImpl();
+		System.out.println("purchaseVO 셋팅완료 : " + purchaseVO);
 		
-		//5. purchaseVO를 인자로 넘겨주며 addPurchase() 실행
+		//purchaseVO를 DB에 저장하기 위해 PurchaseServiceImpl 인스턴스 생성
+		PurchaseService purchaseService = new PurchaseServiceImpl();
 		purchaseService.addPurchase(purchaseVO);
 		
-		//6. 구매정보가 담긴 purchaseVO를 addPurchase.jsp에 넘겨주기 위해 Request Object Scope에 setAttribute를 통해 저장
 		request.setAttribute("purchaseVO", purchaseVO);
 		
 		System.out.println("<<<<< AddPurchaseAction : execute() 종료 >>>>>");
-		
-		return "forward:/purchase/addPurchase.jsp";
-		
-	}//end of execute()
-}//end of class
+		return "forward:/purchase/addPurchase.jsp";		
+	}
+}

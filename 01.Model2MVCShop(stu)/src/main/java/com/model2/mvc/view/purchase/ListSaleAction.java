@@ -59,7 +59,7 @@ public class ListSaleAction extends Action {//판매목록 요청(Admin화면)
 		
 		System.out.println("<<<<< ListSaleAction : execute() 종료 >>>>>");
 		
-		return "forward:/product/listProduct.jsp";
+		return "forward:/purchase/listSale.jsp";
 		
 	}//end of execute()	
 }//end of class

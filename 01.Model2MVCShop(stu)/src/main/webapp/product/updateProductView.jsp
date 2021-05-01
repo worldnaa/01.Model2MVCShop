@@ -1,12 +1,11 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
-
 <%@ page import="com.model2.mvc.service.product.vo.*" %>
 
 <%
-	System.out.println("<<< updateProductView.jsp 시작 >>>");
+	System.out.println("<<<<< updateProductView.jsp 시작 >>>>>");
 
-	ProductVO vo = (ProductVO)request.getAttribute("vo");
-	System.out.println("vo는? "+request.getAttribute("vo"));
+	ProductVO vo = (ProductVO)request.getAttribute("productVO");
+	System.out.println("받은 productVO : " + vo);
 %>
 
 <html>
@@ -189,3 +188,4 @@ function fncAddProduct(){
 
 </body>
 </html>
+<% System.out.println("<<<<< updateProductView.jsp 종료 >>>>>"); %>

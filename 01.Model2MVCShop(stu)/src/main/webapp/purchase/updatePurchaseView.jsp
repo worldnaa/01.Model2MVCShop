@@ -3,8 +3,9 @@
  
 <%
 	System.out.println("<<<<< updatePurchaseView.jsp 시작 >>>>>");
+	
 	PurchaseVO vo = (PurchaseVO)request.getAttribute("purchaseVO");
-	System.out.println("vo 는? " + vo);
+	System.out.println("받은 purchaseVO : " + vo);
 %>   
     
 <html>
@@ -126,7 +127,7 @@
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td width="200" class="ct_write01">
 			<input type="text" readonly="readonly" name="divyDate" class="ct_input_g" 
-						style="width: 100px; height: 19px" maxLength="20" value="<%= vo.getDivyDate().substring(0, 10).replace('-', ' ') %>" />
+						style="width: 100px; height: 19px" maxLength="20" value="<%= vo.getDivyDate().substring(0, 10).replaceAll("-", "") %>" />
 				<img 	src="../images/ct_icon_date.gif" width="15" height="15"	
 							onclick="show_calendar('document.updatePurchase.divyDate', document.updatePurchase.divyDate.value)"/>
 		</td>

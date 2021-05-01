@@ -185,10 +185,10 @@ function fncGetProductList(){
 		<td></td>
 		<td align="left">
 		
-		<% if(vo.getProTranCode().equals("판매중")) {%>
-				<a href="/getProduct.do?prodNo=<%=vo.getProdNo()%>&menu=<%=menu%>"><%=vo.getProdName()%></a>
-		<% }else{%>
-			<%=vo.getProdName()%>
+		<% if(menu.equals("manage")) { %>
+			<a href="/getProduct.do?prodNo=<%=vo.getProdNo()%>&menu=<%=menu%>"><%=vo.getProdName() %></a>
+		<% }else if(menu.equals("search")) {%>
+			<a href="/getProduct.do?prodNo=<%=vo.getProdNo()%>&menu=<%=menu%>"><%=vo.getProdName() %></a>
 		<% } %>
 		
 		</td>
@@ -197,7 +197,32 @@ function fncGetProductList(){
 		<td></td>
 		<td align="left"><%= vo.getRegDate() %></td>
 		<td></td>
-		<td align="left"><%= vo.getProTranCode() %></td>	
+		<td align="left">
+		
+		<% if(menu.equals("manage")) { %>		
+			
+			<% if(vo.getProTranCode() == null){ %>
+				판매중
+			<% } else if(vo.getProTranCode().trim().equals("1")){ %>
+				구매완료 
+				<a href="/updateTranCodeByProd.do?prodNo=<%=vo.getProdNo()%>&tranCode=2&page=<%=searchVO.getPage()%>">배송하기</a>
+			<% } else if(vo.getProTranCode().trim().equals("2")){ %>
+				배송중
+			<% } else if(vo.getProTranCode().trim().equals("3")){ %>
+				배송완료
+			<% } %>
+										
+		<% }else if(menu.equals("search")) {%>
+			
+			<% if(vo.getProTranCode().equals("판매중")) {%>
+				판매중
+			<% }else{%>
+				재고없음
+			<% } %>
+								
+		<% } %>
+				
+		</td>	
 	</tr>			
 	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
@@ -210,7 +235,15 @@ function fncGetProductList(){
 		<td align="center">
 		
 		<% for(int i=1; i<=totalPage; i++) { %>
-			<a href="/listProduct.do?page=<%=i%>&menu=search"><%=i %></a>
+			
+			<% if(menu.equals("manage")) { %>
+				<a href="/listSale.do?page=<%=i%>&searchCondition=<%=searchVO.getSearchCondition() %>
+				&searchKeyword=<%=searchVO.getSearchKeyword() %>&menu=<%=menu %>"><%=i %></a>
+			<% }else if(menu.equals("search")) { %>
+				<a href="/listProduct.do?page=<%=i%>&searchCondition=<%=searchVO.getSearchCondition() %>
+				&searchKeyword=<%=searchVO.getSearchKeyword() %>&menu=<%=menu %>"><%=i %></a>
+			<% } %>
+			
 		<% } %>
 		
     	</td>

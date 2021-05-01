@@ -2,16 +2,16 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.model2.mvc.common.SearchVO"%>
 <%@page import="java.util.HashMap"%>
-<%@ page contentType="text/html; charset=EUC-KR"%>
-
+<%@page contentType="text/html; charset=EUC-KR"%>
 
 <%
 	System.out.println("<<<<< listPurchase.jsp 시작 >>>>>");
+	
 	HashMap<String,Object> map = (HashMap<String,Object>)request.getAttribute("map");
-	System.out.println("map 은? " + request.getAttribute("map"));
+	System.out.println("받은 map : " + map);
 	
 	SearchVO searchVO = (SearchVO)request.getAttribute("searchVO");
-	System.out.println("searchVO 는? " + request.getAttribute("searchVO"));
+	System.out.println("받은 searchVO : " + searchVO);
 
 	int total = 0;
 	ArrayList<PurchaseVO> list = null;
@@ -19,8 +19,8 @@
 		total = (Integer)map.get("count");
 		list  = (ArrayList<PurchaseVO>)map.get("list");
 		
-		System.out.println("total 은? " + total);
-		System.out.println("list 는? " + list);
+		System.out.println("total : " + total);
+		System.out.println("list : " + list);
 	}
 	
 	int currentPage = searchVO.getPage();
@@ -36,10 +36,9 @@
 		}
 	}
 	
-	System.out.println("currentPage 는? " + currentPage);
-	System.out.println("totalPage 는? " + totalPage);
+	System.out.println("currentPage : " + currentPage);
+	System.out.println("totalPage : " + totalPage);
 %>
-
 
 <html>
 <head>

@@ -5,10 +5,8 @@
 	System.out.println("<<<<< addPurchase.jsp 시작 >>>>>");
 	
 	PurchaseVO purchaseVO = (PurchaseVO)request.getAttribute("purchaseVO");
-	System.out.println(purchaseVO);
+	System.out.println("받은 purchaseVO : " + purchaseVO);
 %>
-
-
 
 <html>
 <head>
@@ -35,7 +33,7 @@
 	<tr>
 		<td>구매방법</td>
 		<td>
-			<% if(purchaseVO.getPaymentOption().equals("1")) {%>
+			<% if(purchaseVO.getPaymentOption().trim().equals("1")) {%>
 				현금구매
 			<% }else { %>
 				신용구매

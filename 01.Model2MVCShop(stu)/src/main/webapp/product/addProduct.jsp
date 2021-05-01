@@ -1,10 +1,13 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
-
 <%@ page import="com.model2.mvc.service.product.vo.*" %>
 
-<%-- ProductVO vo = (ProductVO)session.getAttribute("productVO"); --%>
-
-<% ProductVO vo = (ProductVO)request.getAttribute("vo"); %>
+<!-- ProductVO vo = (ProductVO)session.getAttribute("productVO"); -->
+<% 
+	System.out.println("<<<<< addProduct.jsp 시작 >>>>>");
+	
+	ProductVO vo = (ProductVO)request.getAttribute("productVO");
+	System.out.println("받은 productVO : " + vo);
+%>
 
 <html>
 <head>
@@ -140,3 +143,4 @@
 
 </body>
 </html>
+<% System.out.println("<<<<< addProduct.jsp 종료 >>>>>"); %>

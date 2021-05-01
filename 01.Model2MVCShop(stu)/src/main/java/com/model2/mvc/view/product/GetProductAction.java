@@ -22,35 +22,27 @@ public class GetProductAction extends Action {//상품상세보기 요청
 	
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//디버깅
-		System.out.println("<<<여기는 GetProductAction >>>");
+		System.out.println("<<<<< GetProductAction : execute() 시작 >>>>>");
 		
-		//"prodNo"의 value를 가져와서 prodNo에 저장
 		int prodNo = Integer.parseInt(request.getParameter("prodNo"));
-		System.out.println("prodNo는? "+prodNo);//디버깅
+		System.out.println("받은 prodNo : " + prodNo);
 		
-		//"menu"의 value를 가져와서 menu에 저장
 		String menu = request.getParameter("menu");
-		System.out.println("menu는? "+menu);//디버깅
+		System.out.println("받은 menu : " + menu);
 		
 		//menu의 값이 manage일 경우
 		if(menu != null && menu.equals("manage")) {
 			return "forward:/updateProductView.do?prodNo="+prodNo+"&menu="+menu;
 		}
 		
-		//ProductServiceImpl 인스턴스 생성
 		ProductService service = new ProductServiceImpl();
+		ProductVO productVO = service.getProduct(prodNo);
+		System.out.println("productVO 셋팅완료 : " + productVO);
 		
-		//vo에 ProductServiceImpl의 getProduct() 메소드 결과값 저장
-		ProductVO vo = service.getProduct(prodNo);
-		System.out.println("<<< DAO : getfindProduct() 종료 >>>");//디버깅
-		System.out.println("vo는? "+vo);//디버깅
+		request.setAttribute("productVO", productVO);
 		
-		//request에 vo 값을 셋팅
-		request.setAttribute("vo", vo);
-
+		System.out.println("<<<<< GetProductAction : execute() 종료 >>>>>");
 		return "forward:/product/getProduct.jsp";
 		
-	}//end of execute()
-
-}//end of class
+	}
+}
